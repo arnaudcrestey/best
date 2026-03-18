@@ -44,10 +44,10 @@ export default function FormulairePage() {
     }
   };
 
-  if (success) {
+ if (success) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] px-4 py-6 sm:px-6">
-      <section className="w-full max-w-xl rounded-[28px] border border-slate-200 bg-white px-6 py-8 shadow-[0_20px_60px_rgba(37,99,235,0.08)] sm:px-10 sm:py-10">
+      <section className="w-full max-w-2xl rounded-[28px] border border-slate-200 bg-white px-6 py-8 shadow-[0_20px_60px_rgba(37,99,235,0.08)] sm:px-10 sm:py-10">
         <div className="flex flex-col items-center text-center">
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,0.22)]">
             <svg
@@ -70,11 +70,11 @@ export default function FormulairePage() {
             Demande transmise
           </p>
 
-          <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="mt-4 text-[2rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-[2.4rem]">
             Votre demande a bien été envoyée
           </h1>
 
-          <p className="mt-5 max-w-lg text-base leading-7 text-slate-600 sm:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:max-w-xl sm:text-lg">
             Merci pour votre message. Notre équipe reviendra vers vous rapidement
             avec une première orientation adaptée à votre situation.
           </p>
@@ -91,8 +91,8 @@ export default function FormulairePage() {
 
             <p className="mt-3">
               BEST fournit une information juridique et une orientation pour les
-              salariés. Ce service ne remplace pas un avocat ni un avis
-              juridique individualisé.
+              salariés. Ce service ne remplace pas un avocat ni un avis juridique
+              individualisé.
             </p>
           </div>
         </div>
@@ -100,7 +100,6 @@ export default function FormulairePage() {
     </main>
   );
 }
-
   return (
     <SiteShell>
       <main className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
