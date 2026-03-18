@@ -45,61 +45,61 @@ export default function FormulairePage() {
   };
 
   if (success) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] px-4 py-6 sm:px-6 sm:py-10">
-        <section className="w-full max-w-2xl rounded-[24px] border border-slate-200 bg-white px-5 py-8 shadow-[0_20px_60px_rgba(37,99,235,0.10)] sm:rounded-[32px] sm:px-8 sm:py-10 md:px-12 md:py-14">
-          <div className="mx-auto flex max-w-xl flex-col items-center text-center">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-blue-600 text-white shadow-[0_12px_28px_rgba(37,99,235,0.28)] sm:mb-6 sm:h-20 sm:w-20 sm:rounded-[24px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="h-8 w-8 sm:h-10 sm:w-10"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </div>
-
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600 sm:text-sm">
-              Demande transmise
-            </p>
-
-            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:mt-5 sm:text-4xl md:text-5xl">
-              Votre demande a bien été envoyée
-            </h1>
-
-            <p className="mt-5 text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
-              Merci pour votre message. Notre équipe reviendra vers vous rapidement
-              avec une première orientation adaptée à votre situation.
-            </p>
-
-            <div className="mt-8 w-full rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm leading-7 text-slate-600 sm:mt-10 sm:px-6 sm:py-5 sm:text-base">
-              <p className="font-semibold text-slate-900">
-                Informations utiles
-              </p>
-
-              <p className="mt-3">
-                Pensez à vérifier votre boîte email ainsi que vos courriers
-                indésirables.
-              </p>
-
-              <p className="mt-3">
-                BEST fournit une information juridique et une orientation pour les
-                salariés. Ce service ne remplace pas un avocat ni un avis
-                juridique individualisé.
-              </p>
-            </div>
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] px-4 py-6 sm:px-6">
+      <section className="w-full max-w-xl rounded-[28px] border border-slate-200 bg-white px-6 py-8 shadow-[0_20px_60px_rgba(37,99,235,0.08)] sm:px-10 sm:py-10">
+        <div className="flex flex-col items-center text-center">
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,0.22)]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="h-8 w-8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
           </div>
-        </section>
-      </main>
-    );
-  }
+
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
+            Demande transmise
+          </p>
+
+          <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl">
+            Votre demande a bien été envoyée
+          </h1>
+
+          <p className="mt-5 max-w-lg text-base leading-7 text-slate-600 sm:text-lg">
+            Merci pour votre message. Notre équipe reviendra vers vous rapidement
+            avec une première orientation adaptée à votre situation.
+          </p>
+
+          <div className="mt-8 w-full rounded-2xl bg-slate-50 px-5 py-5 text-left text-sm leading-7 text-slate-600">
+            <p className="font-semibold text-slate-900">
+              Informations utiles
+            </p>
+
+            <p className="mt-3">
+              Pensez à vérifier votre boîte email ainsi que vos courriers
+              indésirables.
+            </p>
+
+            <p className="mt-3">
+              BEST fournit une information juridique et une orientation pour les
+              salariés. Ce service ne remplace pas un avocat ni un avis
+              juridique individualisé.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
 
   return (
     <SiteShell>
