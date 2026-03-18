@@ -44,6 +44,61 @@ export default function FormulairePage() {
     }
   };
 
+  if (success) {
+    return (
+      <SiteShell>
+        <main className="flex min-h-[calc(100vh-72px)] items-center justify-center bg-[linear-gradient(180deg,#f8fafc_0%,#eef4ff_100%)] px-4 py-10">
+          <section className="w-full max-w-2xl rounded-[32px] border border-slate-200 bg-white px-8 py-12 text-center shadow-[0_30px_80px_rgba(37,99,235,0.10)] sm:px-12">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[24px] bg-blue-600 text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-10 w-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </div>
+
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-blue-600">
+              Demande transmise
+            </p>
+
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Votre demande a bien été envoyée
+            </h1>
+
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-600">
+              Merci pour votre message. Notre équipe reviendra vers vous rapidement
+              avec une première orientation adaptée à votre situation.
+            </p>
+
+            <div className="mt-8 rounded-2xl bg-slate-50 px-6 py-5 text-left text-sm leading-7 text-slate-600">
+              <p className="font-semibold text-slate-900">
+                Informations utiles
+              </p>
+              <p className="mt-2">
+                Pensez à vérifier votre boîte email ainsi que vos courriers
+                indésirables.
+              </p>
+              <p className="mt-2">
+                BEST fournit une information juridique et une orientation pour les
+                salariés. Ce service ne remplace pas un avocat ni un avis
+                juridique individualisé.
+              </p>
+            </div>
+          </section>
+        </main>
+      </SiteShell>
+    );
+  }
+
   return (
     <SiteShell>
       <main className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
@@ -62,108 +117,80 @@ export default function FormulairePage() {
           </p>
         </section>
 
-        <section className="mx-auto mt-10 max-w-3xl rounded-[28px] border border-slate-200/70 bg-white/80 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur sm:p-8">
-          {!success ? (
-            <>
-              <div className="mb-6 rounded-2xl bg-slate-100 p-4 text-sm text-slate-600">
-                <p className="font-semibold text-slate-800">Avant de commencer</p>
-                <p className="mt-1">
-                  Indiquez les faits, dates, personnes impliquées et impacts
-                  observés. Cela améliore la qualité de l'orientation.
-                </p>
-              </div>
+        <section className="mx-auto mt-10 max-w-3xl card p-6 sm:p-8">
+          <div className="mb-6 rounded-2xl bg-slate-100 p-4 text-sm text-slate-600">
+            <p className="font-semibold text-slate-800">Avant de commencer</p>
+            <p className="mt-1">
+              Indiquez les faits, dates, personnes impliquées et impacts
+              observés. Cela améliore la qualité de l'orientation.
+            </p>
+          </div>
 
-              <form className="space-y-5" onSubmit={handleSubmit}>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="space-y-2 text-sm font-medium text-slate-700">
-                    <span>Nom (optionnel)</span>
-                    <input
-                      type="text"
-                      name="nom"
-                      className="input-field"
-                      placeholder="Votre nom"
-                    />
-                  </label>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <label className="space-y-2 text-sm font-medium text-slate-700">
+                <span>Nom (optionnel)</span>
+                <input
+                  type="text"
+                  name="nom"
+                  className="input-field"
+                  placeholder="Votre nom"
+                />
+              </label>
 
-                  <label className="space-y-2 text-sm font-medium text-slate-700">
-                    <span>Prénom (optionnel)</span>
-                    <input
-                      type="text"
-                      name="prenom"
-                      className="input-field"
-                      placeholder="Votre prénom"
-                    />
-                  </label>
-                </div>
-
-                <label className="space-y-2 text-sm font-medium text-slate-700">
-                  <span>Email</span>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    className="input-field"
-                    placeholder="vous@exemple.fr"
-                  />
-                </label>
-
-                <label className="space-y-2 text-sm font-medium text-slate-700">
-                  <span>Description de la situation</span>
-                  <textarea
-                    name="description"
-                    required
-                    rows={8}
-                    className="input-field"
-                    placeholder="Expliquez les faits, les dates importantes, les échanges déjà réalisés et vos attentes."
-                  />
-                </label>
-
-                <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
-                  <input type="checkbox" required className="mt-1" />
-                  <span>
-                    J'ai compris que BEST fournit une orientation informative et
-                    ne remplace pas un avocat.
-                  </span>
-                </label>
-
-                <p className="rounded-xl bg-brand/10 px-4 py-3 text-sm text-brand">
-                  Votre message est traité de façon strictement confidentielle.
-                </p>
-
-                <button
-                  type="submit"
-                  className="button-primary w-full sm:w-auto"
-                  disabled={loading}
-                >
-                  {loading ? "Envoi en cours..." : "Envoyer ma demande"}
-                </button>
-              </form>
-            </>
-          ) : (
-            <div className="flex min-h-[360px] items-center justify-center">
-              <div className="w-full max-w-xl rounded-[30px] border border-[rgba(255,255,255,0.10)] bg-[linear-gradient(180deg,rgba(76,45,130,0.92)_0%,rgba(43,25,92,0.96)_100%)] px-8 py-10 text-center text-white shadow-[0_30px_120px_rgba(49,25,99,0.35)]">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[22px] bg-white/20 shadow-[0_10px_30px_rgba(255,255,255,0.08)] ring-1 ring-white/10">
-                  <span className="text-3xl">💌</span>
-                </div>
-
-                <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                  Demande confirmée
-                </h2>
-
-                <p className="mt-5 text-lg text-white/90">
-                  Votre demande a bien été enregistrée.
-                </p>
-
-                <p className="mt-4 text-base leading-7 text-white/70 sm:text-lg">
-                  Votre analyse personnalisée vous sera envoyée très prochainement.
-                </p>
-
-                <p className="mt-10 text-sm text-white/45">
-                  ✨ Pensez à vérifier votre boîte email ainsi que vos spams.
-                </p>
-              </div>
+              <label className="space-y-2 text-sm font-medium text-slate-700">
+                <span>Prénom (optionnel)</span>
+                <input
+                  type="text"
+                  name="prenom"
+                  className="input-field"
+                  placeholder="Votre prénom"
+                />
+              </label>
             </div>
-          )}
+
+            <label className="space-y-2 text-sm font-medium text-slate-700">
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                required
+                className="input-field"
+                placeholder="vous@exemple.fr"
+              />
+            </label>
+
+            <label className="space-y-2 text-sm font-medium text-slate-700">
+              <span>Description de la situation</span>
+              <textarea
+                name="description"
+                required
+                rows={8}
+                className="input-field"
+                placeholder="Expliquez les faits, les dates importantes, les échanges déjà réalisés et vos attentes."
+              />
+            </label>
+
+            <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+              <input type="checkbox" required className="mt-1" />
+              <span>
+                J'ai compris que BEST fournit une orientation informative et ne
+                remplace pas un avocat.
+              </span>
+            </label>
+
+            <p className="rounded-xl bg-brand/10 px-4 py-3 text-sm text-brand">
+              Votre message est traité de façon strictement confidentielle.
+            </p>
+
+            <button
+              type="submit"
+              className="button-primary w-full sm:w-auto"
+              disabled={loading}
+            >
+              {loading ? "Envoi en cours..." : "Envoyer ma demande"}
+            </button>
+          </form>
         </section>
       </main>
     </SiteShell>
