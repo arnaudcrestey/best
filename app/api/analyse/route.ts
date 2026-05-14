@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       `,
     });
 
-    return Response.json(
+       return Response.json(
       {
         success: true,
         result:
@@ -87,12 +87,16 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Erreur envoi email BEST :", error);
+    const message =
+      error instanceof Error ? error.message : "Erreur inconnue";
+
+    console.error("Erreur envoi email BEST :", message);
 
     return Response.json(
       {
         success: false,
         result: "Une erreur est survenue lors de l'envoi.",
+        error: message,
       },
       { status: 500 }
     );
