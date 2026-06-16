@@ -9,57 +9,88 @@ const serif = Cormorant_Garamond({
 
 export default function EntryPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f4f6fb] text-[#17213b]">
-      <div className="absolute inset-0 bg-[#f4f6fb]" />
+    <main className="relative min-h-svh overflow-hidden bg-[#f4f7ff] text-[#071126]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.13),transparent_34rem),linear-gradient(180deg,#f7faff_0%,#eef4ff_100%)]" />
 
-      <div className="pointer-events-none absolute left-[-16%] top-0 h-full w-[34%] bg-[linear-gradient(90deg,rgba(203,211,236,0.24)_0%,rgba(244,246,251,0)_100%)] sm:left-[-12%] sm:w-[26%]" />
-      <div className="pointer-events-none absolute right-[-16%] top-0 h-full w-[34%] bg-[linear-gradient(270deg,rgba(190,202,235,0.26)_0%,rgba(244,246,251,0)_100%)] sm:right-[-12%] sm:w-[26%]" />
+      <div className="pointer-events-none absolute left-[-18%] top-[-10%] h-[55vh] w-[55vh] rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-20%] bottom-[-12%] h-[55vh] w-[55vh] rounded-full bg-indigo-400/12 blur-3xl" />
 
-      <section className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:px-8">
-        <div className="w-full max-w-[1440px]">
-          <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-[26px] border border-[#e1e7f8] px-5 py-8 shadow-[0_18px_54px_rgba(20,31,60,0.06),inset_0_1px_0_rgba(255,255,255,0.95)] sm:max-w-[860px] sm:rounded-[30px] sm:px-8 sm:py-12 lg:max-w-[1060px] lg:rounded-[36px] lg:px-14 lg:py-14">
-            <div className="absolute inset-0 bg-[#f8f9fe]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(112,129,214,0.12)_0%,rgba(112,129,214,0.05)_20%,rgba(112,129,214,0)_42%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(47,87,184,0.11)_0%,rgba(47,87,184,0.045)_20%,rgba(47,87,184,0)_44%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.46)_24%,rgba(255,255,255,0)_66%)]" />
-            <div className="pointer-events-none absolute inset-[1px] rounded-[25px] border border-[#eef2fd] sm:rounded-[29px] lg:rounded-[35px]" />
+      <section className="relative z-10 flex min-h-svh items-center justify-center px-4 py-5 sm:px-6 lg:px-8">
+        <div className="relative w-full max-w-[430px] overflow-hidden rounded-[30px] border border-white/80 bg-white/72 px-6 py-9 text-center shadow-[0_24px_70px_rgba(37,99,235,0.10)] backdrop-blur-xl sm:max-w-[860px] sm:px-10 sm:py-14 lg:max-w-[1040px] lg:rounded-[38px] lg:px-14 lg:py-16">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.12),transparent_34rem)]" />
+          <div className="pointer-events-none absolute inset-[1px] rounded-[29px] border border-[#dbe7ff] lg:rounded-[37px]" />
 
-            <div className="relative mx-auto flex min-h-[72vh] max-w-[320px] flex-col items-center justify-center text-center sm:min-h-[70vh] sm:max-w-[680px] lg:min-h-[520px] lg:max-w-[760px]">
-              <p className="mb-4 text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-[#6e7895] sm:mb-5 sm:text-[0.78rem] sm:tracking-[0.42em]">
-                Aide confidentielle au travail
-              </p>
+          <div className="relative mx-auto flex min-h-[70svh] max-w-[330px] flex-col items-center justify-center sm:min-h-[620px] sm:max-w-[720px] lg:min-h-[540px]">
+            <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1f5fe5] text-2xl shadow-[0_18px_36px_rgba(37,99,235,0.22)] sm:h-16 sm:w-16">
+              ⚖️
+            </div>
 
-              <h1
-                className={`${serif.className} text-[clamp(4.5rem,22vw,5.7rem)] font-medium leading-[0.82] tracking-[-0.082em] text-[#10224a] sm:text-[clamp(6rem,13vw,9rem)] sm:leading-[0.78] sm:tracking-[-0.095em] lg:text-[8.4rem]`}
+            <p className="mb-4 text-[0.62rem] font-bold uppercase tracking-[0.34em] text-[#49627f] sm:text-[0.78rem] sm:tracking-[0.44em]">
+              Bien-être des salariés au travail
+            </p>
+
+            <h1
+              className={`${serif.className} text-[clamp(5.1rem,25vw,6.4rem)] font-medium leading-[0.78] tracking-[-0.09em] text-[#081735] sm:text-[clamp(7rem,14vw,9.8rem)] lg:text-[9rem]`}
+            >
+              BEST
+            </h1>
+
+            <div className="mx-auto mt-6 h-px w-[120px] bg-[linear-gradient(90deg,rgba(37,99,235,0)_0%,rgba(37,99,235,0.48)_50%,rgba(37,99,235,0)_100%)] sm:mt-8 sm:w-[170px]" />
+
+            <p
+              className={`${serif.className} mt-6 max-w-[310px] text-balance text-[1.42rem] leading-[1.14] tracking-[-0.04em] text-[#1a2f55] sm:mt-8 sm:max-w-[680px] sm:text-[2.15rem] sm:leading-[1.12]`}
+            >
+              Comprendre une situation professionnelle difficile
+            </p>
+
+            <p className="mt-5 max-w-[300px] text-balance text-sm leading-6 text-[#52657f] sm:max-w-[560px] sm:text-base sm:leading-7">
+              Une aide confidentielle pour clarifier les faits, repérer les
+              signaux importants et identifier les démarches possibles.
+            </p>
+
+            <div className="mt-8 flex w-full flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
+              <Link
+                href="/accueil"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[#1f5fe5] px-7 py-4 text-sm font-bold text-white shadow-[0_18px_40px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-[#174fc4] sm:w-auto sm:min-w-[190px]"
               >
-                BEST
-              </h1>
+                Entrer
+              </Link>
 
-              <div className="mx-auto mt-6 h-px w-[118px] bg-[linear-gradient(90deg,rgba(214,221,246,0)_0%,rgba(184,195,233,0.95)_50%,rgba(214,221,246,0)_100%)] sm:mt-7 sm:w-[150px]" />
-
-              <p
-                className={`${serif.className} mt-6 max-w-[310px] text-balance text-[1.35rem] font-normal leading-[1.16] tracking-[-0.034em] text-[#23345d] sm:mt-7 sm:max-w-[620px] sm:text-[1.9rem] sm:leading-[1.2] lg:text-[2.15rem]`}
+              <Link
+                href="/formulaire"
+                className="inline-flex w-full items-center justify-center rounded-full border border-[#c8d7f2] bg-white/70 px-7 py-4 text-sm font-bold text-[#17345f] transition hover:-translate-y-0.5 hover:bg-white sm:w-auto sm:min-w-[190px]"
               >
-                Comprendre une situation professionnelle difficile
-              </p>
+                Faire le point
+              </Link>
+            </div>
 
-              <div className="mt-8 sm:mt-10">
-                <Link
-                  href="/accueil"
-                  className={`${serif.className} group relative inline-flex min-w-[164px] items-center justify-center overflow-hidden rounded-[17px] border border-[#d8e0f5] bg-[linear-gradient(180deg,#ffffff_0%,#f2f5fb_100%)] px-7 py-3 text-[1.55rem] font-medium leading-none tracking-[-0.03em] text-[#213763] shadow-[0_22px_46px_rgba(17,30,66,0.065),inset_0_1px_0_rgba(255,255,255,1)] transition-all duration-500 hover:-translate-y-[2px] hover:scale-[1.02] sm:min-w-[220px] sm:rounded-[20px] sm:px-10 sm:py-4 sm:text-[2rem]`}
-                >
-                  <span className="relative z-10">Entrer</span>
-                </Link>
+            <div className="mt-10 grid w-full gap-3 text-left sm:mt-12 sm:grid-cols-3">
+              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
+                <p className="text-xs font-semibold text-[#61718a]">
+                  Confidentialité
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
+                  Usage discret
+                </p>
               </div>
 
-              <p
-                className={`${serif.className} mt-11 max-w-[285px] text-balance text-[0.9rem] leading-[1.72] tracking-[-0.012em] text-[#66789d] sm:mt-16 sm:max-w-[540px] sm:text-[1.13rem] sm:leading-[1.9]`}
-              >
-                Clarifier les faits, comprendre les signaux
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                et identifier les démarches possibles.
-              </p>
+              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
+                <p className="text-xs font-semibold text-[#61718a]">
+                  Lecture
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
+                  Repères clairs
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
+                <p className="text-xs font-semibold text-[#61718a]">
+                  Accès
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
+                  Gratuit
+                </p>
+              </div>
             </div>
           </div>
         </div>
