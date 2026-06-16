@@ -20,8 +20,12 @@ export default function EntryPage() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.12),transparent_34rem)]" />
           <div className="pointer-events-none absolute inset-[1px] rounded-[29px] border border-[#dbe7ff] lg:rounded-[37px]" />
 
-          <div className="relative mx-auto flex min-h-[70svh] max-w-[330px] flex-col items-center justify-center sm:min-h-[620px] sm:max-w-[720px] lg:min-h-[540px]">
-            <p className="mb-5 text-[0.62rem] font-bold uppercase tracking-[0.34em] text-[#49627f] sm:text-[0.78rem] sm:tracking-[0.44em]">
+          <div className="relative mx-auto flex min-h-[70svh] max-w-[330px] flex-col items-center justify-center text-center sm:min-h-[620px] sm:max-w-[720px] lg:min-h-[540px]">
+            <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1f5fe5] text-2xl shadow-[0_18px_36px_rgba(37,99,235,0.22)] sm:h-16 sm:w-16">
+              ⚖️
+            </div>
+
+            <p className="mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[#49627f] sm:text-[0.78rem] sm:tracking-[0.44em]">
               Bien-être des salariés au travail
             </p>
 
@@ -32,55 +36,28 @@ export default function EntryPage() {
             <div className="mx-auto mt-6 h-px w-[120px] bg-[linear-gradient(90deg,rgba(37,99,235,0)_0%,rgba(37,99,235,0.48)_50%,rgba(37,99,235,0)_100%)] sm:mt-8 sm:w-[170px]" />
 
             <p
-              className={`${serif.className} mt-6 max-w-[310px] text-balance text-[1.42rem] leading-[1.14] tracking-[-0.04em] text-[#1a2f55] sm:mt-8 sm:max-w-[680px] sm:text-[2.15rem] sm:leading-[1.12]`}
+              className={`${serif.className} mt-7 max-w-[320px] text-balance text-[1.42rem] leading-[1.14] tracking-[-0.04em] text-[#1a2f55] sm:max-w-[700px] sm:text-[2.15rem] sm:leading-[1.12]`}
             >
               Faire le point sur une situation professionnelle difficile
             </p>
 
-            <p className="mt-5 max-w-[300px] text-balance text-sm leading-6 text-[#52657f] sm:max-w-[560px] sm:text-base sm:leading-7">
+            <p className="mt-6 max-w-[310px] text-balance text-sm leading-7 text-[#52657f] sm:max-w-[580px] sm:text-base sm:leading-8">
               Un premier niveau d’analyse pour prendre du recul, structurer les
               éléments importants et éclairer les décisions à venir.
             </p>
 
-            <div className="mt-8 flex w-full flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
+            <div className="mt-10 w-full max-w-[320px]">
               <Link
                 href="/accueil"
-                className="inline-flex w-full items-center justify-center rounded-full bg-[#1f5fe5] px-7 py-4 text-sm font-bold text-white shadow-[0_18px_40px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-[#174fc4] sm:w-auto sm:min-w-[190px]"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[#1f5fe5] px-8 py-4 text-base font-semibold text-white shadow-[0_18px_40px_rgba(37,99,235,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#174fc4]"
               >
                 Entrer
               </Link>
             </div>
 
-            <div className="mt-8 w-full sm:mt-12">
-              <div className="grid grid-cols-3 rounded-[24px] border border-[#dce7fa] bg-white/55 p-3 text-center">
-                <div>
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-[#71819c]">
-                    Libre
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-[#0f1b33]">
-                    Confidentiel
-                  </p>
-                </div>
-
-                <div className="border-x border-[#dce7fa]">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-[#71819c]">
-                    Clair
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-[#0f1b33]">
-                    Structuré
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-[#71819c]">
-                    Simple
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-[#0f1b33]">
-                    Gratuit
-                  </p>
-                </div>
-              </div>
-            </div>
+            <p className="mt-10 text-center text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#6b7c99] sm:text-[0.78rem]">
+              Confidentiel · Structuré · Gratuit
+            </p>
           </div>
         </div>
       </section>
