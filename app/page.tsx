@@ -66,35 +66,40 @@ et éclairer les décisions à venir.
               
             </div>
 
-            <div className="mt-10 grid w-full gap-3 text-left sm:mt-12 sm:grid-cols-3">
-              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
-                <p className="text-xs font-semibold text-[#61718a]">
-                  Confidentialité
-                </p>
-                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
-                  Expression libre
-                </p>
-              </div>
+            <div className="mt-10 w-full sm:mt-14">
+  <div className="flex flex-col gap-3 rounded-[28px] border border-[#dce7fa] bg-white/60 p-5 sm:flex-row sm:items-center sm:justify-center sm:gap-10 sm:p-6">
+    <div className="text-center">
+      <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[#71819c]">
+        Confidentialité
+      </p>
+      <p className="mt-1 text-sm font-semibold text-[#0f1b33]">
+        Expression libre
+      </p>
+    </div>
 
-              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
-                <p className="text-xs font-semibold text-[#61718a]">
-                  Analyse
-                </p>
-                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
-                  Lecture structurée
-                </p>
-              </div>
+    <div className="hidden h-8 w-px bg-[#dce7fa] sm:block" />
 
-              <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
-                <p className="text-xs font-semibold text-[#61718a]">
-                  Accès
-                </p>
-                <p className="mt-1 text-sm font-bold text-[#0f1b33]">
-                  Gratuit
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="text-center">
+      <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[#71819c]">
+        Analyse
+      </p>
+      <p className="mt-1 text-sm font-semibold text-[#0f1b33]">
+        Lecture structurée
+      </p>
+    </div>
+
+    <div className="hidden h-8 w-px bg-[#dce7fa] sm:block" />
+
+    <div className="text-center">
+      <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[#71819c]">
+        Accès
+      </p>
+      <p className="mt-1 text-sm font-semibold text-[#0f1b33]">
+        Gratuit
+      </p>
+    </div>
+  </div>
+</div>
         </div>
       </section>
     </main>
