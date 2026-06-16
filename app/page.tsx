@@ -30,7 +30,7 @@ export default function EntryPage() {
             </p>
 
             <h1 className="text-[clamp(2rem,8vw,3rem)] font-semibold uppercase tracking-[0.45em] text-[#10224a]">
-              B.E.S.T.
+              B.E.S.T
             </h1>
 
             <div className="mx-auto mt-6 h-px w-[120px] bg-[linear-gradient(90deg,rgba(37,99,235,0)_0%,rgba(37,99,235,0.48)_50%,rgba(37,99,235,0)_100%)] sm:mt-8 sm:w-[170px]" />
