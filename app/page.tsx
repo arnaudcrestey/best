@@ -40,12 +40,13 @@ export default function EntryPage() {
             <p
               className={`${serif.className} mt-6 max-w-[310px] text-balance text-[1.42rem] leading-[1.14] tracking-[-0.04em] text-[#1a2f55] sm:mt-8 sm:max-w-[680px] sm:text-[2.15rem] sm:leading-[1.12]`}
             >
-              Comprendre une situation professionnelle difficile
+              Faire le point sur une situation professionnelle difficile
             </p>
 
             <p className="mt-5 max-w-[300px] text-balance text-sm leading-6 text-[#52657f] sm:max-w-[560px] sm:text-base sm:leading-7">
-              Une aide confidentielle pour clarifier les faits, repérer les
-              signaux importants et identifier les démarches possibles.
+              Un premier niveau d'analyse pour prendre du recul,
+structurer les éléments importants
+et éclairer les décisions à venir.
             </p>
 
             <div className="mt-8 flex w-full flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
@@ -56,12 +57,7 @@ export default function EntryPage() {
                 Entrer
               </Link>
 
-              <Link
-                href="/formulaire"
-                className="inline-flex w-full items-center justify-center rounded-full border border-[#c8d7f2] bg-white/70 px-7 py-4 text-sm font-bold text-[#17345f] transition hover:-translate-y-0.5 hover:bg-white sm:w-auto sm:min-w-[190px]"
-              >
-                Faire le point
-              </Link>
+              
             </div>
 
             <div className="mt-10 grid w-full gap-3 text-left sm:mt-12 sm:grid-cols-3">
@@ -70,16 +66,16 @@ export default function EntryPage() {
                   Confidentialité
                 </p>
                 <p className="mt-1 text-sm font-bold text-[#0f1b33]">
-                  Usage discret
+                  Expression libre
                 </p>
               </div>
 
               <div className="rounded-2xl border border-[#dce7fa] bg-white/68 p-4">
                 <p className="text-xs font-semibold text-[#61718a]">
-                  Lecture
+                  Analyse
                 </p>
                 <p className="mt-1 text-sm font-bold text-[#0f1b33]">
-                  Repères clairs
+                  Lecture structurée
                 </p>
               </div>
 
