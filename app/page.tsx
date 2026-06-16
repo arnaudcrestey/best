@@ -1,154 +1,69 @@
 import Link from "next/link";
-import SiteShell from "../components/best/SiteShell";
+import { Cormorant_Garamond } from "next/font/google";
 
-const benefits = [
-  {
-    title: "100% confidentiel",
-    text: "Vos données sont traitées avec discrétion pour vous permettre de parler librement.",
-    icon: "🔒",
-  },
-  {
-    title: "Basé sur le droit du travail",
-    text: "L'analyse s'appuie sur le Code du travail et des sources juridiques reconnues.",
-    icon: "⚖️",
-  },
-  {
-    title: "Gratuit",
-    text: "Un accompagnement informatif sans frais, accessible immédiatement.",
-    icon: "💙",
-  },
-];
+const serif = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
-const steps = [
-  { title: "Décrire la situation", text: "Vous expliquez simplement les faits importants, à votre rythme." },
-  { title: "Analyse de votre situation", text: "Votre situation est étudiée à partir des règles du droit du travail applicables." },
-  { title: "Recommandations personnalisées", text: "Vous recevez des pistes d'action claires et hiérarchisées." },
-];
-
-const situations = ["Harcèlement", "Conflit hiérarchique", "Contrat de travail", "Conditions de travail", "Santé au travail"];
-
-const testimonials = [
-  {
-    quote: "Les réponses m’ont permis d’y voir plus clair et de comprendre les démarches possibles.",
-    role: "Employée administrative",
-  },
-  {
-    quote: "Le service m'a aidé à mieux préparer mon échange avec les RH et le CSE.",
-    role: "Salarié secteur logistique",
-  },
-  {
-    quote: "Clair, rapide et rassurant quand on est stressé et qu'on ne sait plus par où commencer.",
-    role: "Cadre en PME",
-  },
-];
-
-export default function HomePage() {
+export default function EntryPage() {
   return (
-    <SiteShell>
-      <main>
-        <section className="hero-wrapper">
-          <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8 lg:py-20">
-            <div className="space-y-6">
-              <p className="badge">Plateforme d'aide juridique confidentielle</p>
-              <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">Aide confidentielle pour les salariés en difficulté</h1>
-              <p className="max-w-2xl text-lg text-slate-600">Décrivez votre situation et recevez une analyse basée sur le Code du travail.</p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/formulaire" className="button-primary">
-                  Commencer
-                </Link>
-                <Link href="/presentation" className="button-secondary">
-                  Comprendre le service
+    <main className="relative min-h-screen overflow-hidden bg-[#f4f6fb] text-[#17213b]">
+      <div className="absolute inset-0 bg-[#f4f6fb]" />
+
+      <div className="pointer-events-none absolute left-[-16%] top-0 h-full w-[34%] bg-[linear-gradient(90deg,rgba(203,211,236,0.24)_0%,rgba(244,246,251,0)_100%)] sm:left-[-12%] sm:w-[26%]" />
+      <div className="pointer-events-none absolute right-[-16%] top-0 h-full w-[34%] bg-[linear-gradient(270deg,rgba(190,202,235,0.26)_0%,rgba(244,246,251,0)_100%)] sm:right-[-12%] sm:w-[26%]" />
+
+      <section className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1440px]">
+          <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-[26px] border border-[#e1e7f8] px-5 py-8 shadow-[0_18px_54px_rgba(20,31,60,0.06),inset_0_1px_0_rgba(255,255,255,0.95)] sm:max-w-[860px] sm:rounded-[30px] sm:px-8 sm:py-12 lg:max-w-[1060px] lg:rounded-[36px] lg:px-14 lg:py-14">
+            <div className="absolute inset-0 bg-[#f8f9fe]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(112,129,214,0.12)_0%,rgba(112,129,214,0.05)_20%,rgba(112,129,214,0)_42%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(47,87,184,0.11)_0%,rgba(47,87,184,0.045)_20%,rgba(47,87,184,0)_44%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.46)_24%,rgba(255,255,255,0)_66%)]" />
+            <div className="pointer-events-none absolute inset-[1px] rounded-[25px] border border-[#eef2fd] sm:rounded-[29px] lg:rounded-[35px]" />
+
+            <div className="relative mx-auto flex min-h-[72vh] max-w-[320px] flex-col items-center justify-center text-center sm:min-h-[70vh] sm:max-w-[680px] lg:min-h-[520px] lg:max-w-[760px]">
+              <p className="mb-4 text-[0.58rem] font-semibold uppercase tracking-[0.34em] text-[#6e7895] sm:mb-5 sm:text-[0.78rem] sm:tracking-[0.42em]">
+                Aide confidentielle au travail
+              </p>
+
+              <h1
+                className={`${serif.className} text-[clamp(4.5rem,22vw,5.7rem)] font-medium leading-[0.82] tracking-[-0.082em] text-[#10224a] sm:text-[clamp(6rem,13vw,9rem)] sm:leading-[0.78] sm:tracking-[-0.095em] lg:text-[8.4rem]`}
+              >
+                BEST
+              </h1>
+
+              <div className="mx-auto mt-6 h-px w-[118px] bg-[linear-gradient(90deg,rgba(214,221,246,0)_0%,rgba(184,195,233,0.95)_50%,rgba(214,221,246,0)_100%)] sm:mt-7 sm:w-[150px]" />
+
+              <p
+                className={`${serif.className} mt-6 max-w-[310px] text-balance text-[1.35rem] font-normal leading-[1.16] tracking-[-0.034em] text-[#23345d] sm:mt-7 sm:max-w-[620px] sm:text-[1.9rem] sm:leading-[1.2] lg:text-[2.15rem]`}
+              >
+                Comprendre une situation professionnelle difficile
+              </p>
+
+              <div className="mt-8 sm:mt-10">
+                <Link
+                  href="/accueil"
+                  className={`${serif.className} group relative inline-flex min-w-[164px] items-center justify-center overflow-hidden rounded-[17px] border border-[#d8e0f5] bg-[linear-gradient(180deg,#ffffff_0%,#f2f5fb_100%)] px-7 py-3 text-[1.55rem] font-medium leading-none tracking-[-0.03em] text-[#213763] shadow-[0_22px_46px_rgba(17,30,66,0.065),inset_0_1px_0_rgba(255,255,255,1)] transition-all duration-500 hover:-translate-y-[2px] hover:scale-[1.02] sm:min-w-[220px] sm:rounded-[20px] sm:px-10 sm:py-4 sm:text-[2rem]`}
+                >
+                  <span className="relative z-10">Entrer</span>
                 </Link>
               </div>
-              <ul className="grid gap-2 text-sm text-slate-600 sm:grid-cols-3">
-                <li>✓ Sans jargon inutile</li>
-                <li>✓ Orientation concrète</li>
-                <li>✓ Conçu pour les moments sensibles</li>
-              </ul>
-            </div>
 
-            <aside className="card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold text-slate-900">Repères immédiats</h2>
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-slate-100 p-4">
-                  <p className="text-xs text-slate-500">Confidentialité</p>
-                  <p className="mt-1 text-sm font-semibold">Strictement respectée</p>
-                </div>
-                <div className="rounded-2xl bg-slate-100 p-4">
-                  <p className="text-xs text-slate-500">Réponse</p>
-                  <p className="mt-1 text-sm font-semibold">Etude rapide de votre situation</p>
-                </div>
-                <div className="rounded-2xl bg-slate-100 p-4">
-                  <p className="text-xs text-slate-500">Positionnement</p>
-                  <p className="mt-1 text-sm font-semibold">Information juridique</p>
-                </div>
-                <div className="rounded-2xl bg-slate-100 p-4">
-                  <p className="text-xs text-slate-500">Accès</p>
-                  <p className="mt-1 text-sm font-semibold">Gratuit</p>
-                </div>
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        <section className="mx-auto grid w-full max-w-6xl gap-4 px-4 pb-14 sm:px-6 md:grid-cols-3 lg:px-8">
-          {benefits.map((item) => (
-            <article key={item.title} className="card p-6">
-              <p className="text-2xl">{item.icon}</p>
-              <h2 className="mt-4 text-lg font-semibold">{item.title}</h2>
-              <p className="mt-2 text-sm text-slate-600">{item.text}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
-          <div className="card p-6 sm:p-8">
-            <h2 className="section-title">Comment ça fonctionne</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              {steps.map((step, index) => (
-                <article key={step.title} className="rounded-2xl border border-slate-200 bg-white p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand">Étape {index + 1}</p>
-                  <h3 className="mt-2 font-semibold">{step.title}</h3>
-                  <p className="mt-2 text-sm text-slate-600">{step.text}</p>
-                </article>
-              ))}
+              <p
+                className={`${serif.className} mt-11 max-w-[285px] text-balance text-[0.9rem] leading-[1.72] tracking-[-0.012em] text-[#66789d] sm:mt-16 sm:max-w-[540px] sm:text-[1.13rem] sm:leading-[1.9]`}
+              >
+                Clarifier les faits, comprendre les signaux
+                <br className="hidden sm:block" />
+                <span className="sm:hidden"> </span>
+                et identifier les démarches possibles.
+              </p>
             </div>
           </div>
-        </section>
-
-        <section className="mx-auto w-full max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
-          <h2 className="section-title">Types de situations accompagnées</h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {situations.map((item) => (
-              <div key={item} className="rounded-2xl border border-slate-200 bg-white px-4 py-5 text-sm font-medium text-slate-700 shadow-sm">
-                {item}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
-          <h2 className="section-title">Témoignages anonymes</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {testimonials.map((item) => (
-              <blockquote key={item.role} className="card p-6">
-                <p className="text-slate-700">“{item.quote}”</p>
-                <footer className="mt-4 text-sm font-medium text-slate-500">— {item.role}</footer>
-              </blockquote>
-            ))}
-          </div>
-        </section>
-
-        <section className="mx-auto mb-20 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-brand px-6 py-10 text-center text-white shadow-soft sm:px-10">
-            <h2 className="text-2xl font-semibold">Prêt(e) à faire le point sur votre situation ?</h2>
-            <p className="mt-3 text-white/90">Commencez votre demande confidentielle en quelques minutes.</p>
-            <Link href="/formulaire" className="mt-6 inline-flex rounded-full bg-white px-6 py-3 font-semibold text-brand no-underline transition hover:bg-slate-100">
-              Commencer maintenant
-            </Link>
-          </div>
-        </section>
-      </main>
-    </SiteShell>
+        </div>
+      </section>
+    </main>
   );
 }
