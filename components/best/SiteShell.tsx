@@ -6,7 +6,7 @@ type SiteShellProps = {
 };
 
 const navigation = [
-  { href: "/", label: "Accueil" },
+  { href: "/accueil", label: "Accueil" },
   { href: "/presentation", label: "Le service" },
   { href: "/formulaire", label: "Formulaire" },
   { href: "/ressources", label: "Ressources" },
