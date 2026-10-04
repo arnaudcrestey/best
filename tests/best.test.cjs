@@ -166,7 +166,7 @@ const malformed = {
 for (const [name, change] of Object.entries(malformed)) test(`holds unsafe AI response: ${name}`, () => { const response = aiResponse(); change(response); assert.throws(() => parseOpenAI(response), BestError); });
 for (const [name, change] of Object.entries({
   unknownRef: { references: [{ file_id: 'file-other', repere: 'invented' }] }, noRef: { references: [] },
-  longBody: { paragraphes: ['x'.repeat(3000)] }, manyParagraphs: { paragraphes: ['a', 'b', 'c', 'd'] },
+  longBody: { paragraphes: ['x'.repeat(3000)] }, tooManyWords: { paragraphes: ['mot '.repeat(221)] }, manyParagraphs: { paragraphes: ['a', 'b', 'c', 'd'] },
   signature: { cloture: 'Bien à vous, Arnaud CRESTEY' }, extraField: { to: 'evil@example.test' },
   oldTrigger: { paragraphes: ['Nouvelle demande BEST'] },
 })) test(`holds invalid draft: ${name}`, () => assert.throws(() => parseOpenAI(aiResponse({ ...draftJSON, ...change })), BestError));
@@ -177,6 +177,22 @@ test('mail escapes HTML and adds signature exactly once', () => {
   assert.equal(mail.text.match(/Arnaud CRESTEY/g).length, 1);
   assert.ok(!mail.html.includes('file-test'));
   assert.ok(!mail.html.includes('Nouvelle demande BEST'));
+});
+test('mail presents a greeting, source references, personal closing and one signature in reading order', () => {
+  const mail = renderMail(input, draft);
+  assert.match(mail.text, /^Bonjour Camille,\n\n/);
+  assert.ok(mail.text.indexOf(draft.accroche) < mail.text.indexOf(draft.paragraphes[0]));
+  assert.ok(mail.text.indexOf('Repères utilisés') < mail.text.indexOf(draft.cloture));
+  assert.ok(mail.text.indexOf(draft.cloture) < mail.text.indexOf('Bien à vous,'));
+  assert.match(mail.html, /role="presentation"/);
+  assert.equal(mail.html.match(/Arnaud CRESTEY/g).length, 1);
+  assert.equal(mail.to, input.email);
+});
+test('mail greeting supports no first name and safely escapes names with markup', () => {
+  assert.match(renderMail({ ...input, prenom: '' }, draft).text, /^Bonjour,\n\n/);
+  const mail = renderMail({ ...input, prenom: '<img src=x onerror=alert(1)>' }, draft);
+  assert.ok(!mail.html.includes('<img'));
+  assert.ok(mail.html.includes('Bonjour &lt;img'));
 });
 test('review-required draft cannot be rendered for automatic sending', () => assert.throws(() => renderMail(input, { ...draft, statut: 'verification_necessaire' }), BestError));
 

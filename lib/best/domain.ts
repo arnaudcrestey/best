@@ -78,7 +78,7 @@ export function parseOpenAI(value: unknown): BestDraft {
   const texts = [result.accroche, ...result.paragraphes, result.cloture];
   if (texts.some(text => typeof text !== 'string' || !text.trim() || text.length > 2500)) throw new BestError('invalid_response');
   const body = texts.join('\n\n');
-  if (body.length > 6000 || /Bien à vous|Arnaud\s+CRESTEY|demande@arnaudcrestey\.com|www\.arnaudcrestey\.com|Nouvelle demande BEST/i.test(body)) throw new BestError('invalid_response');
+  if (body.length > 6000 || body.trim().split(/\s+/u).length > 220 || /Bien à vous|Arnaud\s+CRESTEY|demande@arnaudcrestey\.com|www\.arnaudcrestey\.com|Nouvelle demande BEST/i.test(body)) throw new BestError('invalid_response');
   if (!Array.isArray(result.references) || result.references.length > 6) throw new BestError('invalid_reference');
   if (result.statut === 'orientation' && (!documents.size || !result.references.length)) throw new BestError('missing_reference');
   const references = result.references.map(value => {
@@ -92,12 +92,37 @@ export function parseOpenAI(value: unknown): BestDraft {
 export function renderMail(input: BestInput, draft: BestDraft): BestMail {
   if (draft.statut === 'verification_necessaire') throw new BestError('human_review_required');
   const escape = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-  const paragraphs = [draft.accroche, ...draft.paragraphes, draft.cloture];
+  const firstName = input.prenom.trim().replace(/\s+/g, ' ');
+  const greeting = firstName ? `Bonjour ${firstName},` : 'Bonjour,';
+  const paragraphs = [draft.accroche, ...draft.paragraphes];
   const sources = Array.from(new Set(draft.references.map(ref => `${ref.filename} — ${ref.repere}`)));
   const signature = 'Bien à vous,\nArnaud CRESTEY\nCommunication & stratégie digitale\ndemande@arnaudcrestey.com\nwww.arnaudcrestey.com';
+  const paragraph = (value: string) => `<p style="margin:0 0 20px;font-size:16px;line-height:1.75;color:#334155;">${escape(value).replace(/\n/g, '<br>')}</p>`;
   return {
     to: input.email, subject: 'Votre première orientation BEST',
-    text: paragraphs.join('\n\n') + (sources.length ? '\n\nDocuments consultés :\n' + sources.join('\n') : '') + '\n\n' + signature,
-    html: `<div lang="fr" style="font-family:Arial,Helvetica,sans-serif;color:#111827;line-height:1.6;max-width:680px;margin:0 auto;padding:24px;"><div style="border:1px solid #e5e7eb;border-radius:16px;padding:28px;background:#fff;"><h2 style="margin:0 0 18px;color:#0f172a;">Votre première orientation BEST</h2>${paragraphs.map(p => `<p style="margin:0 0 16px;">${escape(p).replace(/\n/g, '<br>')}</p>`).join('')}${sources.length ? `<div style="font-size:12px;color:#4b5563;margin:20px 0;"><strong>Documents consultés</strong><br>${sources.map(escape).join('<br>')}</div>` : ''}<p style="margin:24px 0 0;">Bien à vous,<br><strong>Arnaud CRESTEY</strong><br>Communication &amp; stratégie digitale<br><a href="mailto:demande@arnaudcrestey.com">demande@arnaudcrestey.com</a><br><a href="https://www.arnaudcrestey.com">www.arnaudcrestey.com</a></p></div></div>`,
+    text: greeting + '\n\n' + paragraphs.join('\n\n') + (sources.length ? '\n\nRepères utilisés :\n' + sources.join('\n') : '') + '\n\n' + draft.cloture + '\n\n' + signature,
+    html: `<div lang="fr" style="margin:0;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;border:1px solid #e2e8f0;border-top:4px solid #175cd3;border-radius:18px;background:#ffffff;border-spacing:0;">
+          <tr><td style="padding:28px 28px 24px;border-bottom:1px solid #e8eef6;">
+            <p style="margin:0;color:#175cd3;font-size:18px;font-weight:700;letter-spacing:2px;">B.E.S.T</p>
+            <p style="margin:7px 0 0;color:#64748b;font-size:12px;line-height:1.5;">Bien-être des Salariés au Travail</p>
+            <h1 style="margin:22px 0 0;color:#0f172a;font-size:24px;line-height:1.35;font-weight:700;">Votre première orientation</h1>
+          </td></tr>
+          <tr><td style="padding:28px;">
+            <p style="margin:0 0 20px;color:#0f172a;font-size:16px;line-height:1.75;font-weight:600;">${escape(greeting)}</p>
+            ${paragraphs.map(paragraph).join('')}
+            ${sources.length ? `<div style="margin:24px 0;padding:12px 16px;border-left:2px solid #dbe5f2;color:#64748b;font-size:12px;line-height:1.6;"><strong>Repères utilisés</strong><br>${sources.map(escape).join('<br>')}</div>` : ''}
+            ${paragraph(draft.cloture)}
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e8eef6;">
+              <p style="margin:0 0 12px;color:#334155;font-size:15px;line-height:1.7;">Bien à vous,</p>
+              <p style="margin:0;color:#0f172a;font-size:16px;line-height:1.6;"><strong>Arnaud CRESTEY</strong></p>
+              <p style="margin:3px 0 12px;color:#64748b;font-size:13px;line-height:1.6;">Communication &amp; stratégie digitale</p>
+              <p style="margin:0;font-size:13px;line-height:1.8;"><a style="color:#175cd3;text-decoration:none;" href="mailto:demande@arnaudcrestey.com">demande@arnaudcrestey.com</a><br><a style="color:#175cd3;text-decoration:none;" href="https://www.arnaudcrestey.com">www.arnaudcrestey.com</a></p>
+            </div>
+          </td></tr>
+        </table>
+      </td></tr></table>
+    </div>`,
   };
 }
