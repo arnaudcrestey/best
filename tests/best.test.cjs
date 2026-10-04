@@ -10,6 +10,46 @@ const { GET: review } = require('../.test-build/app/api/best/review/route');
 const { sendBestMail } = require('../.test-build/lib/best/mail');
 const nodemailer = require('nodemailer');
 
+// Rendu réel du JSX de confirmation avec un résultat injecté, sans réseau ni navigateur.
+function renderConfirmation(status) {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const ts = require('typescript');
+  const React = require('react');
+  const { renderToStaticMarkup } = require('react-dom/server');
+  const source = fs.readFileSync(path.join(__dirname, '../app/formulaire/page.tsx'), 'utf8');
+  const code = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2020 },
+  }).outputText;
+  const result = { status, reference: 'reference-test-interne', message: 'Texte technique avec cette référence.' };
+  const module = { exports: {} };
+  const load = name => name === 'react'
+    ? { ...React, useState: initial => React.useState(initial === null ? result : initial) }
+    : name === '../../components/best/SiteShell' ? { default: ({ children }) => children } : require(name);
+  new Function('require', 'module', 'exports', code)(load, module, module.exports);
+  return renderToStaticMarkup(React.createElement(module.exports.default));
+}
+
+for (const status of ['sent', 'review', 'pending']) {
+  test(`confirmation ${status} keeps the original presentation without a visible reference`, () => {
+    const html = renderConfirmation(status);
+    assert.match(html, /rounded-\[28px\]/);
+    assert.match(html, /Merci pour votre/);
+    assert.doesNotMatch(html, /reference-test-interne|Référence à conserver|avec cette référence|Texte technique/);
+    assert.doesNotMatch(html, /Notre équipe reviendra/);
+    assert.match(html, /ne remplace pas un avocat/);
+    if (status === 'sent') {
+      assert.match(html, /Demande transmise/);
+      assert.match(html, /Votre demande a bien été envoyée/);
+      assert.match(html, /Pensez à vérifier votre boîte email/);
+    } else {
+      assert.doesNotMatch(html, /Votre demande a bien été envoyée/);
+      assert.match(html, /demande@arnaudcrestey.com/);
+      assert.match(html, status === 'review' ? /Aucun email automatique/ : /Ne renvoyez pas votre demande/);
+    }
+  });
+}
+
 // Aucun test ne doit pouvoir appeler un fournisseur réel.
 global.fetch = async () => { throw new Error('Network forbidden in offline tests'); };
 const form = { nom: 'Exemple', prenom: 'Camille', email: 'camille@example.test', description: 'Mon employeur ne répond pas à ma demande écrite.', consent: true, website: '' };

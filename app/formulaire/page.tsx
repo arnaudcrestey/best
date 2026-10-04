@@ -85,15 +85,19 @@ export default function FormulairePage() {
           </div>
 
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
-            {result.status === "sent" ? "Réponse préparée" : "Point sur votre demande"}
+            {result.status === "sent" ? "Demande transmise" : "Point sur votre demande"}
           </p>
 
           <h1 className="mt-4 text-[2rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-[2.4rem]">
-            {result.status === "sent" ? "Votre réponse est en route" : result.status === "review" ? "Votre demande nécessite une vérification" : "Votre demande est à vérifier"}
+            {result.status === "sent" ? "Votre demande a bien été envoyée" : result.status === "review" ? "Votre demande nécessite une vérification" : "Votre demande est à vérifier"}
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:max-w-xl sm:text-lg">
-            {result.message}
+            {result.status === "sent"
+              ? "Merci pour votre message. Une première orientation adaptée à votre situation vient de vous être envoyée par email."
+              : result.status === "review"
+                ? "Merci pour votre confiance. Votre situation mérite une vérification avant de vous répondre. Aucun email automatique n’a été envoyé. Pour poursuivre, écrivez-nous à demande@arnaudcrestey.com."
+                : "Merci pour votre message. Nous ne pouvons pas encore confirmer son traitement. Ne renvoyez pas votre demande : vérifiez votre boîte email ou écrivez-nous à demande@arnaudcrestey.com."}
           </p>
 
           <div className="mt-8 w-full rounded-2xl bg-slate-50 px-5 py-5 text-left text-sm leading-7 text-slate-600">
@@ -101,9 +105,12 @@ export default function FormulairePage() {
               Informations utiles
             </p>
 
-            <p className="mt-3">
-              Référence à conserver : <span className="break-all">{result.reference}</span>
-            </p>
+            {result.status === "sent" && (
+              <p className="mt-3">
+                Pensez à vérifier votre boîte email ainsi que vos courriers
+                indésirables.
+              </p>
+            )}
 
             <p className="mt-3">
               BEST fournit une information juridique et une orientation pour les
