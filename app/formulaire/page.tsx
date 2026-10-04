@@ -226,7 +226,12 @@ export default function FormulairePage() {
               <label>Site web<input name="website" tabIndex={-1} autoComplete="off" /></label>
             </div>
             {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
-            {loading && <p role="status" className="text-sm text-slate-600">Préparation de votre réponse… Cela peut prendre environ une minute. Gardez cette page ouverte.</p>}
+            {loading && (
+              <div role="status" aria-live="polite" className="flex items-center gap-3 text-sm text-slate-600">
+                <span aria-hidden="true" className="h-5 w-5 shrink-0 rounded-full border-2 border-brand/20 border-t-brand motion-safe:animate-spin" />
+                <span>Préparation de votre réponse…</span>
+              </div>
+            )}
 
             <button
               type="submit"
