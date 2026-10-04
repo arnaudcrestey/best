@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "incremental": false,
+    "module": "commonjs",
+    "outDir": ".test-build"
+  },
+  "include": ["lib/best/**/*.ts", "app/api/analyse/route.ts", "app/api/best/review/route.ts"],
+  "exclude": ["node_modules", ".next", ".test-build"]
+}

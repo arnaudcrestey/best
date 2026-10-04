@@ -1,104 +1,59 @@
-import nodemailer from "nodemailer";
+import { loadConfig } from '../../../lib/best/config';
+import { BestError, validateInput } from '../../../lib/best/domain';
+import { generateDraft } from '../../../lib/best/openai';
+import { sendBestMail } from '../../../lib/best/mail';
+import { processBest } from '../../../lib/best/service';
+import { getDemoStore } from '../../../lib/best/store';
 
-type ContactBody = {
-  nom?: string;
-  prenom?: string;
-  email?: string;
-  description?: string;
-};
+export const runtime = 'nodejs';
+export const maxDuration = 120;
+const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 
-function getEnv(name: string): string {
-  const value = process.env[name];
-
-  if (!value) {
-    throw new Error(`Variable d'environnement manquante : ${name}`);
-  }
-
-  return value;
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+async function readBody(req: Request): Promise<unknown> {
+  if (!req.headers.get('content-type')?.startsWith('application/json')) throw new BestError('invalid_input', 415);
+  if (Number(req.headers.get('content-length')) > 65536) throw new BestError('invalid_input', 413);
+  const reader = req.body?.getReader();
+  if (!reader) throw new BestError('invalid_input', 400);
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 65536) { await reader.cancel(); throw new BestError('invalid_input', 413); }
+      chunks.push(value);
+    }
+    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+  } catch (error) {
+    if (error instanceof BestError) throw error;
+    throw new BestError('invalid_input', 400);
+  } finally { reader.releaseLock(); }
 }
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as ContactBody;
-
-    const nom = body.nom?.trim() || "Non renseigné";
-    const prenom = body.prenom?.trim() || "Non renseigné";
-    const email = body.email?.trim() || "Non renseigné";
-    const description = body.description?.trim() || "Non renseignée";
-
-    const smtpHost = getEnv("SMTP_HOST");
-    const smtpPort = Number(getEnv("SMTP_PORT"));
-    const smtpUser = getEnv("SMTP_USER");
-    const smtpPass = getEnv("SMTP_PASS");
-    const mailFrom = getEnv("MAIL_FROM");
-    const mailTo = getEnv("MAIL_TO");
-
-    const transporter = nodemailer.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
+    const config = loadConfig();
+    if (req.headers.get('origin') !== config.origin) throw new BestError('origin_not_allowed', 403);
+    const input = validateInput(await readBody(req));
+    // Vercel réécrit cet en-tête ; ailleurs le quota commun évite de faire confiance à une IP librement fournie.
+    const client = process.env.VERCEL === '1' ? (req.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() || 'shared') : 'shared';
+    const result = await processBest(input, client, config.mode, {
+      store: getDemoStore(config.dailyLimit),
+      generate: input => generateDraft(input, config.ai),
+      send: (mail, id) => {
+        if (!config.smtp) throw new BestError('service_unavailable');
+        return sendBestMail(mail, id, config.smtp);
       },
     });
-
-    await transporter.verify();
-
-    await transporter.sendMail({
-      from: mailFrom,
-      to: mailTo,
-      replyTo: email !== "Non renseigné" ? email : undefined,
-      subject: "Nouvelle demande BEST",
-      html: `
-        <div style="font-family: Arial, Helvetica, sans-serif; color: #111827; line-height: 1.6; max-width: 700px; margin: 0 auto; padding: 24px;">
-          <h2 style="margin: 0 0 24px; font-size: 24px; color: #111827;">Nouvelle demande BEST</h2>
-
-          <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 14px; font-size: 18px; color: #111827;">Informations</h3>
-            <p style="margin: 0 0 8px;"><strong>Nom :</strong> ${escapeHtml(nom)}</p>
-            <p style="margin: 0 0 8px;"><strong>Prénom :</strong> ${escapeHtml(prenom)}</p>
-            <p style="margin: 0;"><strong>Email :</strong> ${escapeHtml(email)}</p>
-          </div>
-
-          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-            <h3 style="margin: 0 0 14px; font-size: 18px; color: #111827;">Description</h3>
-            <p style="margin: 0; white-space: pre-line;">${escapeHtml(description)}</p>
-          </div>
-        </div>
-      `,
-    });
-
-       return Response.json(
-      {
-        success: true,
-        result:
-          "Votre demande a bien été envoyée. Nous reviendrons vers vous rapidement.",
-      },
-      { status: 200 }
-    );
+    return Response.json(result, { status: result.status === 'sent' ? 200 : 202, headers });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Erreur inconnue";
-
-    console.error("Erreur envoi email BEST :", message);
-
-    return Response.json(
-      {
-        success: false,
-        result: "Une erreur est survenue lors de l'envoi.",
-        error: message,
-      },
-      { status: 500 }
-    );
+    const known = error instanceof BestError ? error : new BestError('service_unavailable');
+    const message = known.status === 429
+      ? 'Le nombre de demandes autorisé est atteint. Veuillez réessayer plus tard ou écrire à demande@arnaudcrestey.com.'
+      : known.status < 500 ? 'Vérifiez les champs du formulaire et votre accord avant de réessayer.'
+      : 'Le service de réponse est momentanément indisponible. Vous pouvez écrire directement à demande@arnaudcrestey.com.';
+    // Ni contenu salarié, ni clé, ni détail fournisseur dans les logs ou la réponse.
+    return Response.json({ status: 'error', message }, { status: known.status, headers });
   }
 }

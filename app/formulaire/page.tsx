@@ -1,15 +1,22 @@
 "use client";
 
 import SiteShell from "../../components/best/SiteShell";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import type { PublicResult } from "../../lib/best/service";
 
 export default function FormulairePage() {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [result, setResult] = useState<PublicResult | null>(null);
+  const [error, setError] = useState("");
+  const [confirmationUncertain, setConfirmationUncertain] = useState(false);
+  const submitting = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting.current || confirmationUncertain) return;
+    submitting.current = true;
     setLoading(true);
+    setError("");
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -19,8 +26,11 @@ export default function FormulairePage() {
       prenom: formData.get("prenom"),
       email: formData.get("email"),
       description: formData.get("description"),
+      consent: formData.get("consent") === "on",
+      website: formData.get("website") || "",
     };
 
+    let attemptUncertain = false;
     try {
       const response = await fetch("/api/analyse", {
         method: "POST",
@@ -28,23 +38,31 @@ export default function FormulairePage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        signal: AbortSignal.timeout(130000),
       });
-
+      const payload = await response.json();
       if (!response.ok) {
-        throw new Error("Erreur lors de l'envoi du formulaire");
+        if (response.status >= 500 && payload.status !== "error") {
+          attemptUncertain = true;
+          setConfirmationUncertain(true);
+        }
+        setError(typeof payload.message === "string" ? payload.message : "Le service est momentanément indisponible.");
+        return;
       }
-
-      setSuccess(true);
+      if (!["sent", "review", "pending"].includes(payload.status) || typeof payload.message !== "string" || typeof payload.reference !== "string") throw new Error("invalid_response");
+      setResult(payload);
       form.reset();
-    } catch (error) {
-      console.error(error);
-      alert("L'envoi a échoué. Veuillez réessayer dans quelques instants.");
+    } catch {
+      attemptUncertain = true;
+      setConfirmationUncertain(true);
+      setError("La confirmation n’a pas pu être reçue. Votre demande a peut-être été prise en compte : ne la renvoyez pas. Vérifiez votre boîte email ou contactez demande@arnaudcrestey.com.");
     } finally {
+      submitting.current = attemptUncertain;
       setLoading(false);
     }
   };
 
- if (success) {
+ if (result) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] px-4 py-6 sm:px-6">
       <section className="w-full max-w-2xl rounded-[28px] border border-slate-200 bg-white px-6 py-8 shadow-[0_20px_60px_rgba(37,99,235,0.08)] sm:px-10 sm:py-10">
@@ -67,16 +85,15 @@ export default function FormulairePage() {
           </div>
 
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
-            Demande transmise
+            {result.status === "sent" ? "Réponse préparée" : "Point sur votre demande"}
           </p>
 
           <h1 className="mt-4 text-[2rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-[2.4rem]">
-            Votre demande a bien été envoyée
+            {result.status === "sent" ? "Votre réponse est en route" : result.status === "review" ? "Votre demande nécessite une vérification" : "Votre demande est à vérifier"}
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:max-w-xl sm:text-lg">
-            Merci pour votre message. Notre équipe reviendra vers vous rapidement
-            avec une première orientation adaptée à votre situation.
+            {result.message}
           </p>
 
           <div className="mt-8 w-full rounded-2xl bg-slate-50 px-5 py-5 text-left text-sm leading-7 text-slate-600">
@@ -85,8 +102,7 @@ export default function FormulairePage() {
             </p>
 
             <p className="mt-3">
-              Pensez à vérifier votre boîte email ainsi que vos courriers
-              indésirables.
+              Référence à conserver : <span className="break-all">{result.reference}</span>
             </p>
 
             <p className="mt-3">
@@ -116,6 +132,10 @@ export default function FormulairePage() {
             Prenez le temps de décrire votre situation. Plus votre message est
             précis, plus l'analyse sera utile.
           </p>
+          <p className="mt-3 text-sm text-slate-500">
+            Site témoin : la réponse est réellement préparée par IA et envoyée
+            par email. Aucun dossier de suivi n’est créé sur le site.
+          </p>
         </section>
 
         <section className="mx-auto mt-10 max-w-3xl card p-6 sm:p-8">
@@ -134,6 +154,8 @@ export default function FormulairePage() {
                 <input
                   type="text"
                   name="nom"
+                  maxLength={150}
+                  autoComplete="family-name"
                   className="input-field"
                   placeholder="Votre nom"
                 />
@@ -144,6 +166,8 @@ export default function FormulairePage() {
                 <input
                   type="text"
                   name="prenom"
+                  maxLength={150}
+                  autoComplete="given-name"
                   className="input-field"
                   placeholder="Votre prénom"
                 />
@@ -155,6 +179,8 @@ export default function FormulairePage() {
               <input
                 type="email"
                 name="email"
+                maxLength={254}
+                autoComplete="email"
                 required
                 className="input-field"
                 placeholder="vous@exemple.fr"
@@ -165,6 +191,7 @@ export default function FormulairePage() {
               <span>Description de la situation</span>
               <textarea
                 name="description"
+                maxLength={12000}
                 required
                 rows={8}
                 className="input-field"
@@ -173,23 +200,33 @@ export default function FormulairePage() {
             </label>
 
             <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
-              <input type="checkbox" required className="mt-1" />
+              <input type="checkbox" name="consent" required className="mt-1" />
               <span>
                 J'ai compris que BEST fournit une orientation informative et ne
-                remplace pas un avocat.
+                remplace pas un avocat. J’accepte le traitement de ma demande
+                pour préparer et recevoir cette réponse, avec l’aide d’une IA.
               </span>
             </label>
 
             <p className="rounded-xl bg-brand/10 px-4 py-3 text-sm text-brand">
-              Votre message est traité de façon strictement confidentielle.
+              Seuls votre prénom et votre description sont transmis à OpenAI
+              pour préparer la réponse à l’aide de notre bibliothèque. Évitez
+              les noms de tiers et les données sensibles inutiles. Une copie de
+              la réponse est conservée par l’équipe BEST.
             </p>
+
+            <div className="hidden" aria-hidden="true">
+              <label>Site web<input name="website" tabIndex={-1} autoComplete="off" /></label>
+            </div>
+            {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
+            {loading && <p role="status" className="text-sm text-slate-600">Préparation de votre réponse… Cela peut prendre environ une minute. Gardez cette page ouverte.</p>}
 
             <button
               type="submit"
               className="button-primary w-full sm:w-auto"
-              disabled={loading}
+              disabled={loading || confirmationUncertain}
             >
-              {loading ? "Envoi en cours..." : "Envoyer ma demande"}
+              {loading ? "Traitement en cours..." : confirmationUncertain ? "Vérifiez votre boîte email" : "Envoyer ma demande"}
             </button>
           </form>
         </section>
