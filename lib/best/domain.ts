@@ -79,6 +79,10 @@ export function parseOpenAI(value: unknown): BestDraft {
   if (texts.some(text => typeof text !== 'string' || !text.trim() || text.length > 2500)) throw new BestError('invalid_response');
   const body = texts.join('\n\n');
   if (body.length > 6000 || body.trim().split(/\s+/u).length > 220 || /Bien à vous|Arnaud\s+CRESTEY|demande@arnaudcrestey\.com|www\.arnaudcrestey\.com|Nouvelle demande BEST/i.test(body)) throw new BestError('invalid_response');
+  // Bloquer les anciennes consignes de relance plutôt que les envoyer ou les réessayer.
+  const normalized = body.normalize('NFD').replace(/\p{M}/gu, '').replace(/[’‘]/g, "'");
+  if (/dans quel pays|(?:repond(?:re|ez)|reponse)\s+(?:directement\s+)?a (?:cet|ce|notre) (?:e-?mail|courriel|message)|(?:contactez|ecrivez|informez|repondez|envoyez)[-\s](?:nous|moi)|(?:me|nous)\s+(?:contacter|ecrire|transmettre|envoyer|tenir informe|poser.{0,30}questions)|(?:reven(?:ir|ez)|retour)\s+vers (?:moi|nous)|(?:je|nous)\s+reste(?:ons)?\s+a votre disposition/i.test(normalized)) throw new BestError('invalid_response');
+  if (result.statut !== 'verification_necessaire' && !/avocat|juriste|point[-\s]justice|syndicat|\bCSE\b|représentant.{0,30}personnel|inspection du travail|médecin|santé au travail|défenseur des droits|services? d['’]urgence|police|gendarmerie/i.test(String(result.cloture))) throw new BestError('invalid_response');
   if (!Array.isArray(result.references) || result.references.length > 6) throw new BestError('invalid_reference');
   if (result.statut === 'orientation' && (!documents.size || !result.references.length)) throw new BestError('missing_reference');
   const references = result.references.map(value => {

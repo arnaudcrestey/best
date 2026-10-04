@@ -50,9 +50,9 @@ export async function POST(req: Request) {
   } catch (error) {
     const known = error instanceof BestError ? error : new BestError('service_unavailable');
     const message = known.status === 429
-      ? 'Le nombre de demandes autorisé est atteint. Veuillez réessayer plus tard ou écrire à demande@arnaudcrestey.com.'
+      ? 'Le nombre de demandes autorisé est atteint. Veuillez réessayer plus tard. Pour une première information juridique, vous pouvez contacter un Point-justice.'
       : known.status < 500 ? 'Vérifiez les champs du formulaire et votre accord avant de réessayer.'
-      : 'Le service de réponse est momentanément indisponible. Vous pouvez écrire directement à demande@arnaudcrestey.com.';
+      : 'Le service de réponse est momentanément indisponible. Un Point-justice peut vous aider à obtenir une première information juridique sur votre situation.';
     // Ni contenu salarié, ni clé, ni détail fournisseur dans les logs ou la réponse.
     return Response.json({ status: 'error', message }, { status: known.status, headers });
   }

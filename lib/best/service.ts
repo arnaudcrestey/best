@@ -4,8 +4,8 @@ import { BestJob, BestStore } from './store';
 export type PublicResult = { status: 'sent' | 'review' | 'pending'; reference: string; message: string };
 export function publicResult(job: BestJob): PublicResult {
   if (job.status === 'sent') return { status: 'sent', reference: job.id, message: 'Votre première orientation a été confiée au service de messagerie. Pensez à vérifier votre boîte email et vos courriers indésirables.' };
-  if (job.status === 'review') return { status: 'review', reference: job.id, message: 'Aucune réponse automatique n’a été envoyée. Ce site témoin ne conserve pas de dossier à relire. Pour poursuivre avec une personne, écrivez à demande@arnaudcrestey.com.' };
-  return { status: 'pending', reference: job.id, message: 'Le résultat du traitement n’est pas confirmé. Ne renvoyez pas votre demande : vérifiez votre boîte email, puis contactez demande@arnaudcrestey.com avec cette référence. Ce site témoin ne conserve pas de dossier.' };
+  if (job.status === 'review') return { status: 'review', reference: job.id, message: 'Aucune réponse automatique n’a été envoyée. Ce site témoin ne conserve pas de dossier à relire. Un Point-justice peut vous proposer une première information juridique pour examiner votre situation avec un professionnel.' };
+  return { status: 'pending', reference: job.id, message: 'Le résultat du traitement n’est pas confirmé. Ne renvoyez pas votre demande : vérifiez votre boîte email. Pour un premier conseil juridique, vous pouvez contacter un Point-justice. Ce site témoin ne conserve pas de dossier.' };
 }
 
 export async function processBest(

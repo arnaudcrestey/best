@@ -44,7 +44,9 @@ for (const status of ['sent', 'review', 'pending']) {
       assert.match(html, /Pensez à vérifier votre boîte email/);
     } else {
       assert.doesNotMatch(html, /Votre demande a bien été envoyée/);
-      assert.match(html, /demande@arnaudcrestey.com/);
+      assert.doesNotMatch(html, /demande@arnaudcrestey.com|écrivez-nous|contactez-nous/);
+      assert.match(html, /Point-justice/);
+      assert.match(html, /https:\/\/www.service-public.gouv.fr\/particuliers\/vosdroits\/F20706/);
       assert.match(html, status === 'review' ? /Aucun email automatique/ : /Ne renvoyez pas votre demande/);
     }
   });
@@ -54,7 +56,7 @@ for (const status of ['sent', 'review', 'pending']) {
 global.fetch = async () => { throw new Error('Network forbidden in offline tests'); };
 const form = { nom: 'Exemple', prenom: 'Camille', email: 'camille@example.test', description: 'Mon employeur ne répond pas à ma demande écrite.', consent: true, website: '' };
 const input = validateInput(form);
-const draftJSON = { statut: 'orientation', accroche: 'Merci pour votre message.', paragraphes: ['Gardez une copie de vos échanges.'], cloture: 'Vous pouvez préciser les dates utiles.', references: [{ file_id: 'file-test', repere: 'Section de test' }] };
+const draftJSON = { statut: 'orientation', accroche: 'Merci pour votre message.', paragraphes: ['Gardez une copie de vos échanges.'], cloture: 'Un juriste en Point-justice peut vous aider à examiner vos échanges. Préparez quelques dates pour ce premier rendez-vous.', references: [{ file_id: 'file-test', repere: 'Section de test' }] };
 function aiResponse(draft = draftJSON) {
   return { status: 'completed', output: [
     { type: 'file_search_call', status: 'completed', results: [{ file_id: 'file-test', filename: 'Document de test.pdf', text: 'Extrait exclusivement fictif pour test technique.' }] },
@@ -171,6 +173,35 @@ for (const [name, change] of Object.entries({
   oldTrigger: { paragraphes: ['Nouvelle demande BEST'] },
 })) test(`holds invalid draft: ${name}`, () => assert.throws(() => parseOpenAI(aiResponse({ ...draftJSON, ...change })), BestError));
 test('questions can request missing information without fabricated references', () => assert.equal(parseOpenAI(aiResponse({ ...draftJSON, statut: 'precision_necessaire', references: [] })).references.length, 0));
+for (const paragraph of [
+  'Dans quel pays travaillez-vous ?',
+  'Vous pouvez répondre à cet e-mail avec ces précisions.',
+  'Répondez à ce courriel après votre rendez-vous.',
+  'Contactez-nous si vous avez une question.',
+  'Écrivez-moi pour poursuivre.',
+  'Vous pouvez nous transmettre votre contrat.',
+  'Merci de me tenir informé des suites.',
+  'Revenez vers nous après ce premier échange.',
+  'Je reste à votre disposition.',
+]) test(`does not send a country question or a BEST follow-up: ${paragraph}`, () => {
+  assert.throws(() => parseOpenAI(aiResponse({ ...draftJSON, paragraphes: [paragraph] })), e => e.code === 'invalid_response');
+});
+test('closing must name an outside contact rather than invite further questions', () => {
+  assert.throws(() => parseOpenAI(aiResponse({ ...draftJSON, cloture: "N'hésitez pas à poser d'autres questions." })), BestError);
+});
+for (const cloture of [
+  'Un avocat en droit du travail peut examiner vos pièces : prenez rendez-vous avec votre contrat.',
+  'Un juriste dans un Point-justice peut vous aider à clarifier les prochaines démarches.',
+  'Vous pouvez demander un rendez-vous au médecin du travail pour parler des effets de cette situation sur votre santé.',
+  'Un syndicat de votre administration peut vous accompagner pour préparer vos démarches.',
+  'Prenez contact avec votre représentant du personnel pour préparer un premier échange.',
+]) test(`accepts an appropriate outside closing: ${cloture}`, () => {
+  assert.equal(parseOpenAI(aiResponse({ ...draftJSON, cloture })).cloture, cloture);
+});
+test('allows employer correspondence and an explicit cross-border situation, not a BEST follow-up', () => {
+  const paragraph = 'Pour votre emploi en Belgique, préparez votre contrat pour un juriste local. Conservez une copie avant de répondre à votre employeur.';
+  assert.equal(parseOpenAI(aiResponse({ ...draftJSON, paragraphes: [paragraph] })).paragraphes[0], paragraph);
+});
 test('mail escapes HTML and adds signature exactly once', () => {
   const mail = renderMail(input, { ...draft, accroche: '<img src=x onerror=alert(1)>' });
   assert.ok(mail.html.includes('&lt;img')); assert.ok(!mail.html.includes('<img'));
@@ -224,6 +255,8 @@ test('review does not promise a saved file or retained draft', async () => {
   const h = harness({ generate: async () => ({ ...draft, statut: 'verification_necessaire' }) });
   const result = await processBest(input, 'ip', 'live', h.dependencies);
   assert.match(result.message, /ne conserve pas de dossier/);
+  assert.match(result.message, /Point-justice/);
+  assert.doesNotMatch(result.message, /demande@arnaudcrestey.com|écrivez-nous|contactez-nous/);
   assert.equal(h.store.job.draft, undefined);
   assert.equal(h.counts()[1], 0);
 });
@@ -340,6 +373,8 @@ test('HTTP route is unavailable without activation; no raw error is exposed', as
     const response = await POST(new Request('https://best.example.test/api/analyse', { method: 'POST', body: '{}' }));
     assert.equal(response.status, 503); assert.equal(response.headers.get('cache-control'), 'no-store');
     const body = await response.json(); assert.equal(body.status, 'error'); assert.ok(!JSON.stringify(body).includes('OPENAI'));
+    assert.match(body.message, /Point-justice/);
+    assert.doesNotMatch(body.message, /demande@arnaudcrestey.com|écrivez-nous/);
   } finally { if (before === undefined) delete process.env.BEST_AUTOMATION_MODE; else process.env.BEST_AUTOMATION_MODE = before; }
 });
 test('HTTP route rejects cross-site, oversized, malformed and unconsented input before network', async () => {

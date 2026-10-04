@@ -55,7 +55,7 @@ export default function FormulairePage() {
     } catch {
       attemptUncertain = true;
       setConfirmationUncertain(true);
-      setError("La confirmation n’a pas pu être reçue. Votre demande a peut-être été prise en compte : ne la renvoyez pas. Vérifiez votre boîte email ou contactez demande@arnaudcrestey.com.");
+      setError("La confirmation n’a pas pu être reçue. Votre demande a peut-être été prise en compte : ne la renvoyez pas. Vérifiez votre boîte email. Pour une première information juridique, vous pouvez contacter un Point-justice.");
     } finally {
       submitting.current = attemptUncertain;
       setLoading(false);
@@ -96,8 +96,8 @@ export default function FormulairePage() {
             {result.status === "sent"
               ? "Merci pour votre message. Une première orientation adaptée à votre situation vient de vous être envoyée par email."
               : result.status === "review"
-                ? "Merci pour votre confiance. Votre situation mérite une vérification avant de vous répondre. Aucun email automatique n’a été envoyé. Pour poursuivre, écrivez-nous à demande@arnaudcrestey.com."
-                : "Merci pour votre message. Nous ne pouvons pas encore confirmer son traitement. Ne renvoyez pas votre demande : vérifiez votre boîte email ou écrivez-nous à demande@arnaudcrestey.com."}
+                ? "Merci pour votre confiance. Votre situation mérite l’avis d’un professionnel. Aucun email automatique n’a été envoyé. Un Point-justice peut vous aider à faire le point sur vos droits et vos démarches."
+                : "Merci pour votre message. Nous ne pouvons pas encore confirmer son traitement. Ne renvoyez pas votre demande : vérifiez votre boîte email. Si vous avez besoin d’un premier conseil juridique, vous pouvez contacter un Point-justice."}
           </p>
 
           <div className="mt-8 w-full rounded-2xl bg-slate-50 px-5 py-5 text-left text-sm leading-7 text-slate-600">
@@ -109,6 +109,14 @@ export default function FormulairePage() {
               <p className="mt-3">
                 Pensez à vérifier votre boîte email ainsi que vos courriers
                 indésirables.
+              </p>
+            )}
+
+            {result.status !== "sent" && (
+              <p className="mt-3">
+                <a className="font-medium text-blue-700 underline underline-offset-4" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F20706" target="_blank" rel="noopener noreferrer">
+                  Consulter les possibilités d’aide juridique gratuite
+                </a>
               </p>
             )}
 
